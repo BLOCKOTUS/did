@@ -68,6 +68,14 @@ Easily create a webapp that includes a Frontend (Svelte / React), a Backend (Nod
 
 ### Features
 - Hyperledger Fabric implementation of Decentralized Identifiers (DIDs) standard by W3C
+- Verifiable Credentials
+- Verifiable Data Registry
+- DID Documents
+- DID Subjects
+- DID Controllers
+- DID Methods
+- DID Resolvers
+- DID Urls
 
 ## Documentation
 This repository is part of the [BLOCKOTUS Organism](https://github.com/BLOCKOTUS/organism).
