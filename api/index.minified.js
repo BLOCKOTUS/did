@@ -44,6 +44,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var WALLET_PATH = _path["default"].join(__dirname, '..', '..', '..', 'wallet');
+/**
+ * Transform a javascript object to a Query String
+ * https://gist.github.com/tjmehta/9204891#gistcomment-3527084
+ */
+
 
 var objectToQueryString = function objectToQueryString(initialObj) {
   var reducer = function reducer(obj) {
@@ -53,7 +58,7 @@ var objectToQueryString = function objectToQueryString(initialObj) {
       key = encodeURIComponent(key);
       var prefix = parentPrefix ? "".concat(parentPrefix, "[").concat(key, "]") : key;
 
-      if (val == null || typeof val === 'function') {
+      if (val === null || typeof val === 'function') {
         prev.push("".concat(prefix, "="));
         return prev;
       }
@@ -89,6 +94,8 @@ var makeFragment = function makeFragment(fragment) {
 /**
  * Construct a DID url based on arguments.
  * The DID url will be consumed by Chaincode Contracts.
+ *
+ * https://www.w3.org/TR/did-core/#did-syntax
  * did-url = did path-abempty [ "?" query ] [ "#" fragment ]
  * path-abempty    ; begins with "/" or is empty
  */
@@ -125,13 +132,16 @@ var request = /*#__PURE__*/function () {
             throw new Error('Url or methodName and methodSpecificId are missing.');
 
           case 3:
-            if (!url) url = makeUrl({
-              methodName: methodName,
-              methodSpecificId: methodSpecificId,
-              urlPath: urlPath,
-              query: query,
-              fragment: fragment
-            });
+            if (!url) {
+              url = makeUrl({
+                methodName: methodName,
+                methodSpecificId: methodSpecificId,
+                urlPath: urlPath,
+                query: query,
+                fragment: fragment
+              });
+            }
+
             console.log({
               url: url
             });

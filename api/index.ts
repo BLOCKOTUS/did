@@ -2,6 +2,9 @@ import fs from 'fs';
 import path from 'path';
 
 import { getContractAndGateway } from '../../helper/api/index.minified.js';
+import type {
+  DIDUrl,
+} from '../types';
 
 const WALLET_PATH = path.join(__dirname, '..', '..', '..', 'wallet');
 
@@ -15,7 +18,7 @@ const objectToQueryString = (initialObj: Record<string, any>): string => {
     key = encodeURIComponent(key);
     const prefix = parentPrefix ? `${parentPrefix}[${key}]` : key;
 
-    if (val == null || typeof val === 'function') {
+    if (val === null || typeof val === 'function') {
       prev.push(`${prefix}=`);
       return prev;
     }
@@ -42,7 +45,7 @@ const makeFragment = (fragment: string) => fragment ? `#${fragment}` : '';
 /**
  * Construct a DID url based on arguments.
  * The DID url will be consumed by Chaincode Contracts.
- * 
+ *
  * https://www.w3.org/TR/did-core/#did-syntax
  * did-url = did path-abempty [ "?" query ] [ "#" fragment ]
  * path-abempty    ; begins with "/" or is empty
@@ -59,7 +62,8 @@ const makeUrl = ({
   urlPath?: string,
   query?: Record<string, any>,
   fragment?: string,
-}): string => `did:${methodName}:${methodSpecificId}${makePath(urlPath)}${makeQuery(query)}${makeFragment(fragment)}`;
+}): DIDUrl =>
+  `did:${methodName}:${methodSpecificId}${makePath(urlPath)}${makeQuery(query)}${makeFragment(fragment)}`;
 
 /**
  * Make a request to the network, using a DID url.
@@ -73,14 +77,14 @@ export const request = async ({
   query,
   fragment,
 }: {
-  url?: string,
+  url?: DIDUrl,
   methodName?: string,
   methodSpecificId?: string,
   urlPath?: string,
   query?: Record<string, any>,
   fragment?: string,
 }): Promise<any> => {
-  if (!url && (!methodName || !methodSpecificId)) throw new Error('Url or methodName and methodSpecificId are missing.');
-  if (!url) url = makeUrl({ methodName, methodSpecificId, urlPath, query, fragment });
+  if (!url && (!methodName || !methodSpecificId)) { throw new Error('Url or methodName and methodSpecificId are missing.'); }
+  if (!url) { url = makeUrl({ methodName, methodSpecificId, urlPath, query, fragment }); }
   console.log({url});
 };
