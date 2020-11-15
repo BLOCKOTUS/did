@@ -42,6 +42,8 @@ const makeFragment = (fragment: string) => fragment ? `#${fragment}` : '';
 /**
  * Construct a DID url based on arguments.
  * The DID url will be consumed by Chaincode Contracts.
+ * 
+ * https://www.w3.org/TR/did-core/#did-syntax
  * did-url = did path-abempty [ "?" query ] [ "#" fragment ]
  * path-abempty    ; begins with "/" or is empty
  */
