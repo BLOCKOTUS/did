@@ -48,7 +48,7 @@
 <br />
 <br />
 
-## _Organ compatible with || BLOCKOTUS || Boilerplate_
+## _Organ compatible with || BLOCKOTUS || Organism_
 
 
 Build complete decentralized applications with BLOCKOTUS Organism. 
