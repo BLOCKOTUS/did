@@ -35,7 +35,7 @@ export class Did extends Contract {
     }
 
     private parseDidUrl = (ur: DIDUrl): ParsedDIDUrl => {
-        let reFragment = /#[\w?\/]*+$/g;
+        let reFragment = /#[\w?\/#]*/g;
         let reQuery = /\?.*/g; // remove fragment match before matching query
         let rePath = /\/(.)*/g; // remove query match before matching path
     }
