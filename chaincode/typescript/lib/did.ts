@@ -20,7 +20,7 @@ export class Did extends Contract {
     /**
      *
      * @param ctx Context
-     * @arg url
+     * @arg didUrl
      */
     public request = async (ctx: Context): Promise<string> => {
         const args = ctx.stub.getFunctionAndParameters();
@@ -34,7 +34,12 @@ export class Did extends Contract {
         // it makes the behaviour more reliable, predictable, and verifiable
     }
 
-    private parseDidUrl = (ur: DIDUrl): ParsedDIDUrl => {
+    /**
+     * Parse a DID url and return an object of information to interact with a decentralized entity.
+     *
+     * @param {string} didUrl
+     */
+    private parseDidUrl = (didUrl: DIDUrl): ParsedDIDUrl => {
         let reFragment = /#[\w?\/#]*/g;
         let reQuery = /\?.*/g; // remove fragment match before matching query
         let rePath = /\/(.)*/g; // remove query match before matching path
