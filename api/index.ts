@@ -36,6 +36,19 @@ const objectToQueryString = (initialObj: Record<string, any>): string => {
 };
 
 /**
+ * Transform a Query String to a javasript object
+ * https://stackoverflow.com/questions/8648892/how-to-convert-url-parameters-to-a-javascript-object
+ */
+const queryStringToObject = (queryString: string): Record<string, any> => {
+  const params = new URLSearchParams(queryString);
+  const result = {};
+  for(const [key, value] of params) { // each 'entry' is a [key, value] tupple
+    result[key] = value;
+  }
+  return result;
+};
+
+/**
  * DID url constructor helpers.
  */
 const makePath = (urlPath: string) => urlPath && urlPath.substr(0, 1) === '/' ? urlPath : '';
@@ -76,6 +89,7 @@ export const request = async ({
   urlPath,
   query,
   fragment,
+  user,
 }: {
   url?: DIDUrl,
   methodName?: string,
@@ -83,8 +97,28 @@ export const request = async ({
   urlPath?: string,
   query?: Record<string, any>,
   fragment?: string,
+  user: { username: string, wallet: string },
 }): Promise<any> => {
+  // check and construct didUrl
   if (!url && (!methodName || !methodSpecificId)) { throw new Error('Url or methodName and methodSpecificId are missing.'); }
   if (!url) { url = makeUrl({ methodName, methodSpecificId, urlPath, query, fragment }); }
   console.log({url});
+
+  // create wallet
+  const walletPath = path.join(WALLET_PATH, `${user.username}.id`);
+  fs.writeFileSync(walletPath, JSON.stringify(user.wallet));
+
+  // get contract and gateway
+  var {contract, gateway} = await getContractAndGateway({username: user.username, chaincode: 'identity', contract: 'Identity'});
+  if (!contract || !gateway) { throw new Error('Contract or Gateway missing.'); }
+  
+  // submit transaction
+  var response = contract.submitTransaction('request', url);
+  
+  //disconnect
+  await gateway.disconnect();
+  
+  if (!response) { throw new Error('Error while submitting transaction.'); }
+
+  return response;
 };

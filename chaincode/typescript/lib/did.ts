@@ -13,7 +13,7 @@ import type {
 
 export class Did extends Contract {
 
-    public initLedger = async () => {
+    public async initLedger() {
         console.log('initLedger');
     }
 
@@ -32,18 +32,56 @@ export class Did extends Contract {
         // here the fun begins, and we will parse the URl the other way - convert it to arguments
         // we prefer to achieve this onchain rather than offchain (api/js)
         // it makes the behaviour more reliable, predictable, and verifiable
+        const parsedDidUrl = this.parseDidUrl(didUrl);
+        console.log(JSON.stringify(parsedDidUrl));
+        console.log(didUrl);
     }
 
     /**
      * Parse a DID url and return an object of information to interact with a decentralized entity.
-     *
-     * @param {string} didUrl
      */
     private parseDidUrl = (didUrl: DIDUrl): ParsedDIDUrl => {
-        let reFragment = /#[\w?\/#]*/g;
-        let reQuery = /\?.*/g; // remove fragment match before matching query
-        let rePath = /\/(.)*/g; // remove query match before matching path
+        const reFragment = /#[\w?\/#]*/g;
+        const reQuery = /\?.*/g; // remove fragment match before matching query
+        const rePath = /\/(.)*/g; // remove query match before matching path
+
+        const matchedFragment = didUrl.match(reFragment);
+        const fragment = Array.isArray(matchedFragment) ? matchedFragment[0] : '';
+        let didUrlCut = didUrl.replace(fragment, '');
+
+        const matchedQuery = didUrlCut.match(reQuery);
+        const rawQuery = Array.isArray(matchedQuery) ? matchedQuery[0] : '';
+        const query = this.queryStringToObject(rawQuery);
+        didUrlCut = didUrlCut.replace(rawQuery, '');
+
+        const matchedPath = didUrlCut.match(rePath);
+        const rawPath = Array.isArray(matchedPath) ? matchedPath[0] : '';
+        const urlPath = rawPath.split('/');
+        didUrlCut = didUrlCut.replace(rawPath, '');
+
+        const methodInfo = didUrlCut.split(':');
+
+        return {
+            methodName: methodInfo[1],
+            methodSpecificId: methodInfo[2],
+            urlPath,
+            query,
+            fragment,
+        }
     }
+
+    /**
+     * Transform a Query String to a javasript object
+     * https://stackoverflow.com/questions/8648892/how-to-convert-url-parameters-to-a-javascript-object
+     */
+    private queryStringToObject = (queryString: string): Record<string, any> => {
+        const params = new URLSearchParams(queryString);
+        const result = {};
+        for(const [key, value] of params) { // each 'entry' is a [key, value] tupple
+            result[key] = value;
+        }
+        return result;
+    };
 
     /**
      * Validate the params received as arguments by a public functions.
