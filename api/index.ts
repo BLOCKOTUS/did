@@ -113,12 +113,13 @@ export const request = async ({
   if (!contract || !gateway) { throw new Error('Contract or Gateway missing.'); }
   
   // submit transaction
-  var response = contract.submitTransaction('request', url);
+  var rawResponse = await contract.submitTransaction('request', url);
   
   //disconnect
   await gateway.disconnect();
   
-  if (!response) { throw new Error('Error while submitting transaction.'); }
+  if (!rawResponse) { throw new Error('Error while submitting transaction.'); }
 
+  const response = JSON.parse(rawResponse.toString('utf8'));
   return response;
 };

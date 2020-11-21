@@ -39,7 +39,8 @@ export class Did extends Contract {
 
         // we invoke the method with parsedDidUrl
         const response = await this.requestWithMethod(ctx, parsedDidUrl);
-        return response;
+        
+        return JSON.stringify(response).toString();
     }
 
     /**

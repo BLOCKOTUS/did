@@ -169,7 +169,7 @@ var makeUrl = function makeUrl(_ref) {
       urlPath = _ref.urlPath,
       query = _ref.query,
       fragment = _ref.fragment;
-  return "did:".concat(methodName, ":").concat(methodSpecificId).concat(makePath(urlPath)).concat(makeQuery(query)).concat(makeFragment(fragment));
+  return "did:".concat(unescape(methodName), ":").concat(unescape(methodSpecificId)).concat(makePath(urlPath)).concat(makeQuery(query)).concat(makeFragment(fragment));
 };
 /**
  * Make a request to the network, using a DID url.
@@ -179,7 +179,7 @@ var makeUrl = function makeUrl(_ref) {
 
 var request = /*#__PURE__*/function () {
   var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(_ref2) {
-    var url, methodName, methodSpecificId, urlPath, query, fragment, user, walletPath, _yield$getContractAnd, contract, gateway, response;
+    var url, methodName, methodSpecificId, urlPath, query, fragment, user, walletPath, _yield$getContractAnd, contract, gateway, rawResponse, response;
 
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
@@ -234,24 +234,28 @@ var request = /*#__PURE__*/function () {
             throw new Error('Contract or Gateway missing.');
 
           case 14:
-            // submit transaction
-            response = contract.submitTransaction('request', url); //disconnect
+            _context.next = 16;
+            return contract.submitTransaction('request', url);
 
-            _context.next = 17;
+          case 16:
+            rawResponse = _context.sent;
+            _context.next = 19;
             return gateway.disconnect();
 
-          case 17:
-            if (response) {
-              _context.next = 19;
+          case 19:
+            if (rawResponse) {
+              _context.next = 21;
               break;
             }
 
             throw new Error('Error while submitting transaction.');
 
-          case 19:
+          case 21:
+            console.log(rawResponse);
+            response = JSON.parse(rawResponse.toString('utf8'));
             return _context.abrupt("return", response);
 
-          case 20:
+          case 24:
           case "end":
             return _context.stop();
         }

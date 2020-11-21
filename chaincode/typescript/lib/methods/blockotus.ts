@@ -5,9 +5,9 @@ import type { ParsedDIDUrl } from "../../../../types";
  * Entry point of the method. 
  * Invoke a service.
  */
-export const blockotus = async (ctx: Context, parsedDidUrl: ParsedDIDUrl) => {
+export const blockotus = async (ctx: Context, parsedDidUrl: ParsedDIDUrl): Promise<string> => {
   // split the methodSpecificId by `:`
-  const methodSpecificIdSpitted = parsedDidUrl.methodSpecificId.split(':');
+  const methodSpecificIdSpitted = Buffer.from(parsedDidUrl.methodSpecificId, 'base64').toString().split(':');
 
   // extract the organ - he is named at the first position (job:jlskj7s78s979-8asdasdf-asd::sdfsdf) => job
   const organ = methodSpecificIdSpitted[0];
@@ -19,30 +19,44 @@ export const blockotus = async (ctx: Context, parsedDidUrl: ParsedDIDUrl) => {
   // construct the subject of the DID request
   const subject = { organ, organSpecificId };
 
+  // get method and datea of the request
+  const method = parsedDidUrl.query.method;
+  const data = parsedDidUrl.query.data;
+
   // get the service from the query parameter
   // the design choice is to have one service per organ
   const service = parsedDidUrl.query.service;
   if (!service) { throw new Error('Service parameter is required.'); }
 
-  return requestService({ ctx, service, subject, parsedDidUrl });
+  return requestService({ ctx, service, subject, method, data });
 }
 
 /**
- * Invoke the service / organ.
+ * Invoke the service/organ.
  */
 const requestService = async (
   {
     ctx,
     service,
     subject,
-    parsedDidUrl,
+    method,
+    data,
   }: {
     ctx: Context,
     service: string,
     subject: { organ: string, organSpecificId: string },
-    parsedDidUrl: ParsedDIDUrl,
+    method: string,
+    data: any,
   }): Promise<string> => {
-  const rawDidRequest = await ctx.stub.invokeChaincode(service, ['didRequest', JSON.stringify(subject), JSON.stringify(parsedDidUrl)], 'mychannel');
+  const rawDidRequest = await ctx.stub.invokeChaincode(
+    service, 
+    [
+      'didRequest', 
+      JSON.stringify(subject), 
+      method || 'GET', 
+      data || ''
+    ], 
+    'mychannel');
   if (rawDidRequest.status !== 200) { throw new Error(rawDidRequest.message); }
   return rawDidRequest.payload.toString();
 }
