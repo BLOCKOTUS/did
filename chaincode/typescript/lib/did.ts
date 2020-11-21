@@ -68,10 +68,11 @@ export class Did extends Contract {
         didUrlCut = didUrlCut.replace(rawPath, '');
 
         const methodInfo = didUrlCut.split(':');
+        const methodName = methodInfo[1];
 
         return {
-            methodName: methodInfo[1],
-            methodSpecificId: methodInfo[2],
+            methodName,
+            methodSpecificId: methodInfo.slice(2).join(':'),
             urlPath,
             query,
             fragment,
