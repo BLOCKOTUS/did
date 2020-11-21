@@ -22,20 +22,22 @@ export class Did extends Contract {
      * @param ctx Context
      * @arg didUrl
      */
-    public async request (ctx: Context): Promise<string> {
+    public async request (ctx: Context): Promise<any> {
         const args = ctx.stub.getFunctionAndParameters();
         const params = args.params;
         this.validateParams(params, 1);
 
         const didUrl = params[0];
+        console.log('DID url: ', didUrl);
 
         // here the fun begins, and we will parse the URL the other way - convert it to arguments
         // we prefer to achieve this onchain rather than offchain (api/js)
         // it makes the behaviour more reliable, predictable, and verifiable
         const parsedDidUrl = this.parseDidUrl(didUrl);
-
         console.log('Parsed did url: ', JSON.stringify(parsedDidUrl));
-        console.log('DID url: ', didUrl);
+
+        // we invoke the method with parsedDidUrl
+        this.requestWithMethod(parsedDidUrl);
     }
 
     /**
@@ -69,6 +71,19 @@ export class Did extends Contract {
             urlPath,
             query,
             fragment,
+        }
+    }
+
+    /**
+     * Request a DID method, following W3C spec registries.
+     * 
+     * https://w3c.github.io/did-spec-registries/#did-methods
+     */
+    private requestWithMethod = (parsedDidUrl: ParsedDIDUrl): any => {
+        const allowedMethods = {
+            blockotus: null,
+            btcr: null,
+            key: null,
         }
     }
 
