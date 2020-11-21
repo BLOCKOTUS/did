@@ -33,7 +33,7 @@ export class Did extends Contract {
         // we prefer to achieve this onchain rather than offchain (api/js)
         // it makes the behaviour more reliable, predictable, and verifiable
         const parsedDidUrl = this.parseDidUrl(didUrl);
-        
+
         console.log('Parsed did url: ', JSON.stringify(parsedDidUrl));
         console.log('DID url: ', didUrl);
     }
@@ -42,7 +42,7 @@ export class Did extends Contract {
      * Parse a DID url and return an object of information to interact with a decentralized entity.
      */
     private parseDidUrl = (didUrl: DIDUrl): ParsedDIDUrl => {
-        const reFragment = /#[\w?\/#]*/g;
+        const reFragment = /#[\w?\/:#]*/g;
         const reQuery = /\?.*/g; // remove fragment match before matching query
         const rePath = /\/(.)*/g; // remove query match before matching path
 
