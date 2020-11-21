@@ -147,7 +147,7 @@ var makePath = function makePath(urlPath) {
 };
 
 var makeQuery = function makeQuery(query) {
-  return query ? "?".concat(objectToQueryString(query)) : '';
+  return query ? "?".concat(objectToQueryString(JSON.parse(query))) : '';
 };
 
 var makeFragment = function makeFragment(fragment) {
@@ -217,8 +217,8 @@ var request = /*#__PURE__*/function () {
             _context.next = 9;
             return (0, _indexMinified.getContractAndGateway)({
               username: user.username,
-              chaincode: 'identity',
-              contract: 'Identity'
+              chaincode: 'did',
+              contract: 'Did'
             });
 
           case 9:
@@ -234,26 +234,24 @@ var request = /*#__PURE__*/function () {
             throw new Error('Contract or Gateway missing.');
 
           case 14:
-            ; // submit transaction
-
+            // submit transaction
             response = contract.submitTransaction('request', url); //disconnect
 
-            _context.next = 18;
+            _context.next = 17;
             return gateway.disconnect();
 
-          case 18:
+          case 17:
             if (response) {
-              _context.next = 20;
+              _context.next = 19;
               break;
             }
 
             throw new Error('Error while submitting transaction.');
 
-          case 20:
-            ;
+          case 19:
             return _context.abrupt("return", response);
 
-          case 22:
+          case 20:
           case "end":
             return _context.stop();
         }

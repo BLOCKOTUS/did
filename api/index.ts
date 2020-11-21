@@ -52,7 +52,7 @@ const queryStringToObject = (queryString: string): Record<string, any> => {
  * DID url constructor helpers.
  */
 const makePath = (urlPath: string) => urlPath && urlPath.substr(0, 1) === '/' ? urlPath : '';
-const makeQuery = (query: Record<string, any>) => query ? `?${objectToQueryString(query)}` : '';
+const makeQuery = (query: string) => query ? `?${objectToQueryString(JSON.parse(query))}` : '';
 const makeFragment = (fragment: string) => fragment ? `#${fragment}` : '';
 
 /**
@@ -73,7 +73,7 @@ const makeUrl = ({
   methodName: string,
   methodSpecificId: string,
   urlPath?: string,
-  query?: Record<string, any>,
+  query?: string,
   fragment?: string,
 }): DIDUrl =>
   `did:${methodName}:${methodSpecificId}${makePath(urlPath)}${makeQuery(query)}${makeFragment(fragment)}`;
@@ -95,7 +95,7 @@ export const request = async ({
   methodName?: string,
   methodSpecificId?: string,
   urlPath?: string,
-  query?: Record<string, any>,
+  query?: string,
   fragment?: string,
   user: { username: string, wallet: string },
 }): Promise<any> => {
@@ -109,7 +109,7 @@ export const request = async ({
   fs.writeFileSync(walletPath, JSON.stringify(user.wallet));
 
   // get contract and gateway
-  var {contract, gateway} = await getContractAndGateway({username: user.username, chaincode: 'identity', contract: 'Identity'});
+  var {contract, gateway} = await getContractAndGateway({username: user.username, chaincode: 'did', contract: 'Did'});
   if (!contract || !gateway) { throw new Error('Contract or Gateway missing.'); }
   
   // submit transaction

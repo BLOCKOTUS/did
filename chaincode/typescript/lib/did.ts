@@ -22,19 +22,20 @@ export class Did extends Contract {
      * @param ctx Context
      * @arg didUrl
      */
-    public request = async (ctx: Context): Promise<string> => {
+    public async request (ctx: Context): Promise<string> {
         const args = ctx.stub.getFunctionAndParameters();
         const params = args.params;
         this.validateParams(params, 1);
 
         const didUrl = params[0];
 
-        // here the fun begins, and we will parse the URl the other way - convert it to arguments
+        // here the fun begins, and we will parse the URL the other way - convert it to arguments
         // we prefer to achieve this onchain rather than offchain (api/js)
         // it makes the behaviour more reliable, predictable, and verifiable
         const parsedDidUrl = this.parseDidUrl(didUrl);
-        console.log(JSON.stringify(parsedDidUrl));
-        console.log(didUrl);
+        
+        console.log('Parsed did url: ', JSON.stringify(parsedDidUrl));
+        console.log('DID url: ', didUrl);
     }
 
     /**
@@ -56,7 +57,8 @@ export class Did extends Contract {
 
         const matchedPath = didUrlCut.match(rePath);
         const rawPath = Array.isArray(matchedPath) ? matchedPath[0] : '';
-        const urlPath = rawPath.split('/');
+        let urlPath = rawPath.split('/');
+        urlPath.shift();
         didUrlCut = didUrlCut.replace(rawPath, '');
 
         const methodInfo = didUrlCut.split(':');
