@@ -6,6 +6,8 @@
 
 import { Context, Contract } from 'fabric-contract-api';
 
+import { blockotus } from './methods/blockotus';
+
 import type {
     DIDUrl,
     ParsedDIDUrl,
@@ -18,7 +20,8 @@ export class Did extends Contract {
     }
 
     /**
-     *
+     * Request a DID Url.
+     * 
      * @param ctx Context
      * @arg didUrl
      */
@@ -37,7 +40,8 @@ export class Did extends Contract {
         console.log('Parsed did url: ', JSON.stringify(parsedDidUrl));
 
         // we invoke the method with parsedDidUrl
-        this.requestWithMethod(parsedDidUrl);
+        const response = await this.requestWithMethod(parsedDidUrl);
+        return response;
     }
 
     /**
@@ -79,12 +83,19 @@ export class Did extends Contract {
      * 
      * https://w3c.github.io/did-spec-registries/#did-methods
      */
-    private requestWithMethod = (parsedDidUrl: ParsedDIDUrl): any => {
+    private requestWithMethod = async (parsedDidUrl: ParsedDIDUrl): Promise<any> => {
+        // implemented DID methods
         const allowedMethods = {
-            blockotus: null,
+            blockotus,
             btcr: null,
             key: null,
         }
+
+        // execute the DID method
+        if (allowedMethods[parsedDidUrl.methodName]) { return await allowedMethods[parsedDidUrl.methodName](parsedDidUrl); }
+
+        // throw an error if the requested method is not a function
+        throw new Error('DID Url Method is not allowed.');
     }
 
     /**
