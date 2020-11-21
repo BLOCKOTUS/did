@@ -1,6 +1,10 @@
 import type { Context } from 'fabric-contract-api';
 import type { ParsedDIDUrl } from "../../../../types";
 
+/**
+ * Entry point of the method. 
+ * Invoke a service.
+ */
 export const blockotus = async (ctx: Context, parsedDidUrl: ParsedDIDUrl) => {
   // split the methodSpecificId by `:`
   const methodSpecificIdSpitted = parsedDidUrl.methodSpecificId.split(':');
@@ -24,9 +28,9 @@ export const blockotus = async (ctx: Context, parsedDidUrl: ParsedDIDUrl) => {
 }
 
 /**
- * Request the service / organ.
+ * Invoke the service / organ.
  */
-export const requestService = async (
+const requestService = async (
   {
     ctx,
     service,
