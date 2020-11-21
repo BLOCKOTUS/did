@@ -31,16 +31,14 @@ export class Did extends Contract {
         this.validateParams(params, 1);
 
         const didUrl = params[0];
-        console.log('DID url: ', didUrl);
 
         // here the fun begins, and we will parse the URL the other way - convert it to arguments
         // we prefer to achieve this onchain rather than offchain (api/js)
         // it makes the behaviour more reliable, predictable, and verifiable
         const parsedDidUrl = this.parseDidUrl(didUrl);
-        console.log('Parsed did url: ', JSON.stringify(parsedDidUrl));
 
         // we invoke the method with parsedDidUrl
-        const response = await this.requestWithMethod(parsedDidUrl);
+        const response = await this.requestWithMethod(ctx, parsedDidUrl);
         return response;
     }
 
@@ -84,7 +82,7 @@ export class Did extends Contract {
      * 
      * https://w3c.github.io/did-spec-registries/#did-methods
      */
-    private requestWithMethod = async (parsedDidUrl: ParsedDIDUrl): Promise<any> => {
+    private requestWithMethod = async (ctx: Context, parsedDidUrl: ParsedDIDUrl): Promise<any> => {
         // implemented DID methods
         const allowedMethods = {
             blockotus,
@@ -93,7 +91,7 @@ export class Did extends Contract {
         }
 
         // execute the DID method
-        if (allowedMethods[parsedDidUrl.methodName]) { return await allowedMethods[parsedDidUrl.methodName](parsedDidUrl); }
+        if (allowedMethods[parsedDidUrl.methodName]) { return await allowedMethods[parsedDidUrl.methodName](ctx, parsedDidUrl); }
 
         // throw an error if the requested method is not a function
         throw new Error('DID Url Method is not allowed.');
