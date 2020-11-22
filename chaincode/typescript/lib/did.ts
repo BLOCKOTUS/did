@@ -11,6 +11,10 @@ import { blockotus } from './methods/blockotus';
 import type {
     DIDUrl,
     ParsedDIDUrl,
+    VerificationMethod,
+    PublicKey,
+    Service,
+    DidDocument,
 } from '../../../types';
 
 export class Did extends Contract {
@@ -76,6 +80,24 @@ export class Did extends Contract {
             query,
             fragment,
         }
+    }
+
+    private buildDidDocument = ({
+        context,
+        id,
+        controller,
+        verificationMethod,
+        publicKey,
+        service,
+    }: {
+        context?: string,
+        id: string,
+        controller?: string,
+        verificationMethod?: Array<VerificationMethod>,
+        publicKey?: Array<PublicKey>,
+        service?: Array<Service>,
+    }): DidDocument => {
+
     }
 
     /**

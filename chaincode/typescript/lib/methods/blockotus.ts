@@ -56,7 +56,8 @@ const requestService = async (
       method || 'GET', 
       data || ''
     ], 
-    'mychannel');
+    'mychannel'
+  );
   if (rawDidRequest.status !== 200) { throw new Error(rawDidRequest.message); }
   return rawDidRequest.payload.toString();
 }
