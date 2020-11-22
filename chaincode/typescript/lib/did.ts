@@ -11,10 +11,8 @@ import { blockotus } from './methods/blockotus';
 import type {
     DIDUrl,
     ParsedDIDUrl,
-    VerificationMethod,
-    PublicKey,
-    Service,
     DidDocument,
+    DidDocumentConstructor
 } from '../../../types';
 
 export class Did extends Contract {
@@ -42,9 +40,13 @@ export class Did extends Contract {
         const parsedDidUrl = this.parseDidUrl(didUrl);
 
         // we invoke the method with parsedDidUrl
-        const response = await this.requestWithMethod(ctx, parsedDidUrl);
+        const rawResponse = await this.requestWithMethod(ctx, parsedDidUrl);
         
-        return JSON.stringify(response).toString();
+        // we make the DID document
+        const response = JSON.parse(rawResponse.toString());
+        const didDocument = this.buildDidDocument(response);
+        
+        return JSON.stringify(didDocument).toString();
     }
 
     /**
@@ -82,22 +84,42 @@ export class Did extends Contract {
         }
     }
 
+    /**
+     * Build a DID document.
+     */
     private buildDidDocument = ({
         context,
         id,
+        subject,
         controller,
         verificationMethod,
         publicKey,
         service,
-    }: {
-        context?: string,
-        id: string,
-        controller?: string,
-        verificationMethod?: Array<VerificationMethod>,
-        publicKey?: Array<PublicKey>,
-        service?: Array<Service>,
-    }): DidDocument => {
+        created,
+        updated,
+        blockotus,
+    }: DidDocumentConstructor): DidDocument => {
+        let didContext: string | Array<string> = 'https://www.w3.org/ns/did/v1';
+        if (context && Array.isArray(context)) { didContext = [...context, 'https://www.w3.org/ns/did/v1']; }
+        if (context && !Array.isArray(context)) { didContext = [context, 'https://www.w3.org/ns/did/v1']; }
 
+        if (!id && !subject) { throw new Error('Cannot construct DID document without id or subject'); }
+        let didId;
+        if (subject) didId = `did:blockotus:${subject.organ}:${Buffer.from(subject.organSpecificId).toString('base64')}`;
+        if (id) didId = id;
+
+
+        return {
+            '@context': didContext,
+            id: didId,
+            controller,
+            verificationMethod,
+            publicKey,
+            service,
+            created,
+            updated,
+            blockotus,
+        }
     }
 
     /**

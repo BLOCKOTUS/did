@@ -20,21 +20,37 @@ type PublicKeyBase = {
     controller: string;
 };
 
-export type VerificationMethod = VerificationMethodBase;
+type VerificationMethod = VerificationMethodBase;
 
-export type Service = {
+type Service = {
     id: string;
     type: string;
     serviceEndpoint: string;
 };
 
-export type PublicKey = PublicKeyBase;
+type PublicKey = PublicKeyBase;
 
 export type DidDocument = {
-    '@context': string;
+    '@context': Array<string> | string;
     id: string;
     controller?: string;
     verificationMethod?: Array<VerificationMethod>;
     publicKey?: Array<PublicKey>;
-    serivce?: Array<Service>;
+    service?: Array<Service>;
+    created?: string;
+    updated?: string;
+    blockotus?: any; 
+};
+
+export type DidDocumentConstructor = {
+    context?: Array<string> | string;
+    id?: string;
+    subject?: { organ: string, organSpecificId: string };
+    controller?: string;
+    verificationMethod?: Array<VerificationMethod>;
+    publicKey?: Array<PublicKey>;
+    service?: Array<Service>;
+    created?: string;
+    updated?: string;
+    blockotus?: any; 
 };
