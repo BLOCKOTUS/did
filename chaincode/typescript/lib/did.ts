@@ -104,14 +104,10 @@ export class Did extends Contract {
         if (context && !Array.isArray(context)) { didContext = [context, 'https://www.w3.org/ns/did/v1']; }
 
         if (!id && !subject) { throw new Error('Cannot construct DID document without id or subject'); }
-        let didId;
-        if (subject) didId = `did:blockotus:${subject.organ}:${Buffer.from(subject.organSpecificId).toString('base64')}`;
-        if (id) didId = id;
-
 
         return {
             '@context': didContext,
-            id: didId,
+            id: id || `did:blockotus:${subject.organ}:${Buffer.from(subject.organSpecificId).toString('base64')}`,
             controller,
             verificationMethod,
             publicKey,
