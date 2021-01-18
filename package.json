@@ -4,7 +4,9 @@
   "description": "Hyperledger Fabric Chaincode for Decentralized Identifiers (DIDs) implementation. BLOCKOTUS Organ. Network Open Standard.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "tslint -c tslint.json './api/*.ts'  -e './node_modules/**'",
+    "build": "rm -f api/*.minified.js && babel api/*.ts -d api/ --out-file-extension .minified.js --extensions '.ts'"
   },
   "repository": {
     "type": "git",
@@ -15,5 +17,21 @@
   "bugs": {
     "url": "https://github.com/BLOCKOTUS/did/issues"
   },
-  "homepage": "https://github.com/BLOCKOTUS/did#readme"
+  "homepage": "https://github.com/BLOCKOTUS/did#readme",
+  "dependencies": {
+    "core-js": "^3.7.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.12.1",
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
+    "@babel/preset-typescript": "^7.12.1",
+    "husky": "^4.3.0",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "typescript": "^3.1.6"
+  },
+  "hooks": {
+    "pre-push": "yarn run lint"
+  }
 }
