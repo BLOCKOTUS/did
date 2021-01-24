@@ -51,7 +51,7 @@ var _fs = _interopRequireDefault(require("fs"));
 
 var _path = _interopRequireDefault(require("path"));
 
-var _indexMinified = require("../../helper/api/index.minified.js");
+var _index = require("../../helper/api/dist/index.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -169,7 +169,7 @@ var makeUrl = function makeUrl(_ref) {
       urlPath = _ref.urlPath,
       query = _ref.query,
       fragment = _ref.fragment;
-  return "did:".concat(unescape(methodName), ":").concat(unescape(methodSpecificId)).concat(makePath(urlPath)).concat(makeQuery(query)).concat(makeFragment(fragment));
+  return "did:".concat(methodName, ":").concat(methodSpecificId).concat(makePath(urlPath)).concat(makeQuery(query)).concat(makeFragment(fragment));
 };
 /**
  * Make a request to the network, using a DID url.
@@ -215,7 +215,7 @@ var request = /*#__PURE__*/function () {
 
 
             _context.next = 9;
-            return (0, _indexMinified.getContractAndGateway)({
+            return (0, _index.getContractAndGateway)({
               username: user.username,
               chaincode: 'did',
               contract: 'Did'
@@ -251,11 +251,10 @@ var request = /*#__PURE__*/function () {
             throw new Error('Error while submitting transaction.');
 
           case 21:
-            console.log(rawResponse);
             response = JSON.parse(rawResponse.toString('utf8'));
             return _context.abrupt("return", response);
 
-          case 24:
+          case 23:
           case "end":
             return _context.stop();
         }

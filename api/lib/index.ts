@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import { getContractAndGateway } from '../../helper/api/index.minified.js';
+import { getContractAndGateway } from '../../helper/api/dist/index.js';
 import type {
   DIDUrl,
 } from '../types';
@@ -42,7 +42,7 @@ const objectToQueryString = (initialObj: Record<string, any>): string => {
 const queryStringToObject = (queryString: string): Record<string, any> => {
   const params = new URLSearchParams(queryString);
   const result = {};
-  for(const [key, value] of params) { // each 'entry' is a [key, value] tupple
+  for (const [key, value] of params) { // each 'entry' is a [key, value] tupple
     result[key] = value;
   }
   return result;
@@ -109,15 +109,15 @@ export const request = async ({
   fs.writeFileSync(walletPath, JSON.stringify(user.wallet));
 
   // get contract and gateway
-  var {contract, gateway} = await getContractAndGateway({username: user.username, chaincode: 'did', contract: 'Did'});
+  const {contract, gateway} = await getContractAndGateway({username: user.username, chaincode: 'did', contract: 'Did'});
   if (!contract || !gateway) { throw new Error('Contract or Gateway missing.'); }
-  
+
   // submit transaction
-  var rawResponse = await contract.submitTransaction('request', url);
-  
-  //disconnect
+  const rawResponse = await contract.submitTransaction('request', url);
+
+  // disconnect
   await gateway.disconnect();
-  
+
   if (!rawResponse) { throw new Error('Error while submitting transaction.'); }
 
   const response = JSON.parse(rawResponse.toString('utf8'));
