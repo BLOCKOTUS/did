@@ -1,12 +1,12 @@
 import fs from 'fs';
 import path from 'path';
 
-import { getContractAndGateway } from '../../helper/api/dist/index.js';
+import { getContractAndGateway } from '../../../helper/api/dist/index.js';
 import type {
   DIDUrl,
-} from '../types';
+} from '../../types';
 
-const WALLET_PATH = path.join(__dirname, '..', '..', '..', 'wallet');
+const WALLET_PATH = path.join(__dirname, '..', '..', '..', '..', 'wallet');
 
 /**
  * Transform a javascript object to a Query String

@@ -51,7 +51,7 @@ var _fs = _interopRequireDefault(require("fs"));
 
 var _path = _interopRequireDefault(require("path"));
 
-var _index = require("../../helper/api/dist/index.js");
+var _index = require("../../../helper/api/dist/index.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -75,7 +75,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-var WALLET_PATH = _path["default"].join(__dirname, '..', '..', '..', 'wallet');
+var WALLET_PATH = _path["default"].join(__dirname, '..', '..', '..', '..', 'wallet');
 /**
  * Transform a javascript object to a Query String
  * https://gist.github.com/tjmehta/9204891#gistcomment-3527084
