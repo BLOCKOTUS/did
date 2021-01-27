@@ -1,51 +1,41 @@
 "use strict";
 
-require("core-js/modules/es.symbol");
+require("core-js/modules/es.symbol.js");
 
-require("core-js/modules/es.symbol.description");
+require("core-js/modules/es.symbol.description.js");
 
-require("core-js/modules/es.symbol.iterator");
+require("core-js/modules/es.symbol.iterator.js");
 
-require("core-js/modules/es.array.concat");
+require("core-js/modules/es.array.concat.js");
 
-require("core-js/modules/es.array.from");
+require("core-js/modules/es.array.includes.js");
 
-require("core-js/modules/es.array.includes");
+require("core-js/modules/es.array.iterator.js");
 
-require("core-js/modules/es.array.is-array");
+require("core-js/modules/es.array.join.js");
 
-require("core-js/modules/es.array.iterator");
+require("core-js/modules/es.array.reduce.js");
 
-require("core-js/modules/es.array.join");
+require("core-js/modules/es.date.to-string.js");
 
-require("core-js/modules/es.array.reduce");
+require("core-js/modules/es.object.keys.js");
 
-require("core-js/modules/es.array.slice");
+require("core-js/modules/es.object.to-string.js");
 
-require("core-js/modules/es.date.to-string");
+require("core-js/modules/es.regexp.to-string.js");
 
-require("core-js/modules/es.function.name");
+require("core-js/modules/es.string.iterator.js");
 
-require("core-js/modules/es.object.keys");
+require("core-js/modules/web.dom-collections.iterator.js");
 
-require("core-js/modules/es.object.to-string");
-
-require("core-js/modules/es.promise");
-
-require("core-js/modules/es.regexp.to-string");
-
-require("core-js/modules/es.string.iterator");
-
-require("core-js/modules/web.dom-collections.iterator");
-
-require("core-js/modules/web.url");
+require("core-js/modules/web.url.js");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.request = void 0;
 
-require("regenerator-runtime/runtime");
+require("regenerator-runtime/runtime.js");
 
 var _fs = _interopRequireDefault(require("fs"));
 
