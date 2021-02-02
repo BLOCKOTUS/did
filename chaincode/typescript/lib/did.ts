@@ -4,7 +4,8 @@
 
 'use strict';
 
-import { Context, Contract } from 'fabric-contract-api';
+import { Context } from 'fabric-contract-api';
+import { BlockotusContract } from 'hyperledger-fabric-chaincode-helper';
 
 import { blockotus } from './methods/blockotus';
 
@@ -15,7 +16,7 @@ import type {
     DidDocumentConstructor
 } from '../../../types';
 
-export class Did extends Contract {
+export class Did extends BlockotusContract {
 
     public async initLedger() {
         console.log('initLedger');
@@ -160,23 +161,5 @@ export class Did extends Contract {
      */
     private validateParams = (params: string[], count: number): void => {
         if (params.length !== count) { throw new Error(`Incorrect number of arguments. Expecting ${count}. Args: ${JSON.stringify(params)}`); }
-    }
-
-    /**
-     * Get the creatorId (transaction submitter unique id) from the Helper organ.
-     */
-    private getCreatorId = async (ctx: Context): Promise<string> => {
-        const rawId = await ctx.stub.invokeChaincode('helper', ['getCreatorId'], 'mychannel');
-        if (rawId.status !== 200) { throw new Error(rawId.message); }
-        return rawId.payload.toString();
-    }
-
-    /**
-     * Get the timestamp from the Helper organ.
-     */
-    private getTimestamp = async (ctx: Context): Promise<string> => {
-        const rawTs = await ctx.stub.invokeChaincode('helper', ['getTimestamp'], 'mychannel');
-        if (rawTs.status !== 200) { throw new Error(rawTs.message); }
-        return rawTs.payload.toString();
     }
 }
