@@ -1,6 +1,6 @@
 {
     "name": "blockotus-organ-did-chaincode-typescript",
-    "version": "0.2.4-alpha",
+    "version": "0.2.6-alpha",
     "description": "did chaincode implemented in node.js",
     "main": "dist/index.js",
     "typings": "dist/index.d.ts",

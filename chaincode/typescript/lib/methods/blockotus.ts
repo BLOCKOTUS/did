@@ -51,7 +51,7 @@ const requestService = async (
   const rawDidRequest = await ctx.stub.invokeChaincode(
     service, 
     [
-      'didRequest', 
+      'did', 
       JSON.stringify(subject), 
       method || 'GET', 
       data || ''
