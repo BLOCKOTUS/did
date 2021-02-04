@@ -22,7 +22,7 @@
     "dependencies": {
         "fabric-contract-api": "^2.0.0",
         "fabric-shim": "^2.0.0",
-        "hyperledger-fabric-chaincode-helper": "0.0.8"
+        "hyperledger-fabric-chaincode-helper": "0.0.14"
     },
     "devDependencies": {
         "@types/chai": "^4.1.7",

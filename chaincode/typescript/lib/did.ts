@@ -29,9 +29,7 @@ export class Did extends BlockotusContract {
      * @arg didUrl
      */
     public async request (ctx: Context): Promise<any> {
-        const args = ctx.stub.getFunctionAndParameters();
-        const params = args.params;
-        this.validateParams(params, 1);
+        const params = this.getParams(ctx, { length: 1 });
 
         const didUrl = params[0];
 
@@ -152,14 +150,4 @@ export class Did extends BlockotusContract {
         return result;
     };
 
-    /**
-     * Validate the params received as arguments by a public functions.
-     * Params are stored in the Context.
-     *
-     * @param {string[]} params params received by a pubic function
-     * @param {number} count number of params expected
-     */
-    private validateParams = (params: string[], count: number): void => {
-        if (params.length !== count) { throw new Error(`Incorrect number of arguments. Expecting ${count}. Args: ${JSON.stringify(params)}`); }
-    }
 }
