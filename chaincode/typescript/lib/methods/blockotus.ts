@@ -19,7 +19,7 @@ export const blockotus = async (ctx: Context, parsedDidUrl: ParsedDIDUrl): Promi
   // construct the subject of the DID request
   const subject = { organ, organSpecificId };
 
-  // get method and datea of the request
+  // get method and data of the request
   const method = parsedDidUrl.query.method;
   const data = parsedDidUrl.query.data;
 
@@ -45,8 +45,8 @@ const requestService = async (
     ctx: Context,
     service: string,
     subject: { organ: string, organSpecificId: string },
-    method: string,
-    data: any,
+    method?: string,
+    data?: string,
   }): Promise<string> => {
   const rawDidRequest = await ctx.stub.invokeChaincode(
     service, 

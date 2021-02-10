@@ -42,10 +42,10 @@ export class Did extends BlockotusContract {
         const rawResponse = await this.requestWithMethod(ctx, parsedDidUrl);
         
         // we make the DID document
-        const response = JSON.parse(rawResponse.toString());
+        const response: DidDocumentConstructor = JSON.parse(rawResponse);
         const didDocument = this.buildDidDocument(response);
         
-        return JSON.stringify(didDocument).toString();
+        return JSON.stringify(didDocument);
     }
 
     /**
@@ -122,7 +122,7 @@ export class Did extends BlockotusContract {
      * 
      * https://w3c.github.io/did-spec-registries/#did-methods
      */
-    private requestWithMethod = async (ctx: Context, parsedDidUrl: ParsedDIDUrl): Promise<any> => {
+    private requestWithMethod = async (ctx: Context, parsedDidUrl: ParsedDIDUrl): Promise<string> => {
         // implemented DID methods
         const allowedMethods = {
             blockotus,
