@@ -1,6 +1,6 @@
 {
   "name": "blockotus-organ-did",
-  "version": "0.2.5-alpha",
+  "version": "0.2.7-alpha",
   "description": "Hyperledger Fabric Chaincode for Decentralized Identifiers (DIDs) implementation. BLOCKOTUS Organ. Network Open Standard.",
   "main": "index.js",
   "scripts": {
