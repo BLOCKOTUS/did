@@ -109,7 +109,7 @@ export const request = async ({
   fs.writeFileSync(walletPath, JSON.stringify(user.wallet));
 
   // get contract and gateway
-  const {contract, gateway} = await getContractAndGateway({username: user.username, chaincode: 'did', contract: 'Did'});
+  const { contract, gateway } = await getContractAndGateway({user, chaincode: 'did', contract: 'Did'});
   if (!contract || !gateway) { throw new Error('Contract or Gateway missing.'); }
 
   // submit transaction
