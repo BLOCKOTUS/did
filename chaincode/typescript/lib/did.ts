@@ -10,10 +10,10 @@ import { BlockotusContract } from 'hyperledger-fabric-chaincode-helper';
 import { blockotus } from './methods/blockotus';
 
 import type {
+    DidDocument,
+    DidDocumentConstructor,
     DIDUrl,
     ParsedDIDUrl,
-    DidDocument,
-    DidDocumentConstructor
 } from '../../../types';
 
 export class Did extends BlockotusContract {
@@ -24,11 +24,11 @@ export class Did extends BlockotusContract {
 
     /**
      * Request a DID Url.
-     * 
+     *
      * @param ctx Context
      * @arg didUrl
      */
-    public async request (ctx: Context): Promise<any> {
+    public async request(ctx: Context): Promise<any> {
         const params = this.getParams(ctx, { length: 1 });
 
         const didUrl = params[0];
@@ -40,11 +40,11 @@ export class Did extends BlockotusContract {
 
         // we invoke the method with parsedDidUrl
         const rawResponse = await this.requestWithMethod(ctx, parsedDidUrl);
-        
+
         // we make the DID document
         const response: DidDocumentConstructor = JSON.parse(rawResponse);
         const didDocument = this.buildDidDocument(response);
-        
+
         return JSON.stringify(didDocument);
     }
 
@@ -67,7 +67,7 @@ export class Did extends BlockotusContract {
 
         const matchedPath = didUrlCut.match(rePath);
         const rawPath = Array.isArray(matchedPath) ? matchedPath[0] : '';
-        let urlPath = rawPath.split('/');
+        const urlPath = rawPath.split('/');
         urlPath.shift();
         didUrlCut = didUrlCut.replace(rawPath, '');
 
@@ -75,12 +75,12 @@ export class Did extends BlockotusContract {
         const methodName = methodInfo[1];
 
         return {
+            fragment,
             methodName,
             methodSpecificId: methodInfo.slice(2).join(':'),
-            urlPath,
             query,
-            fragment,
-        }
+            urlPath,
+        };
     }
 
     /**
@@ -98,7 +98,7 @@ export class Did extends BlockotusContract {
         updated,
         blockotus,
     }: DidDocumentConstructor): DidDocument => {
-        let didContext: string | Array<string> = 'https://www.w3.org/ns/did/v1';
+        let didContext: string | string[] = 'https://www.w3.org/ns/did/v1';
         if (context && Array.isArray(context)) { didContext = [...context, 'https://www.w3.org/ns/did/v1']; }
         if (context && !Array.isArray(context)) { didContext = [context, 'https://www.w3.org/ns/did/v1']; }
 
@@ -106,20 +106,20 @@ export class Did extends BlockotusContract {
 
         return {
             '@context': didContext,
-            id: id || `did:blockotus:${subject.organ}:${Buffer.from(subject.organSpecificId).toString('base64')}`,
+            blockotus,
             controller,
-            verificationMethod,
+            created,
+            id: id || `did:blockotus:${subject.organ}:${Buffer.from(subject.organSpecificId).toString('base64')}`,
             publicKey,
             service,
-            created,
             updated,
-            blockotus,
-        }
+            verificationMethod,
+        };
     }
 
     /**
      * Request a DID method, following W3C spec registries.
-     * 
+     *
      * https://w3c.github.io/did-spec-registries/#did-methods
      */
     private requestWithMethod = async (ctx: Context, parsedDidUrl: ParsedDIDUrl): Promise<string> => {
@@ -128,10 +128,12 @@ export class Did extends BlockotusContract {
             blockotus,
             btcr: null,
             key: null,
-        }
+        };
 
         // execute the DID method
-        if (allowedMethods[parsedDidUrl.methodName]) { return await allowedMethods[parsedDidUrl.methodName](ctx, parsedDidUrl); }
+        if (allowedMethods[parsedDidUrl.methodName]) {
+            return await allowedMethods[parsedDidUrl.methodName](ctx, parsedDidUrl);
+        }
 
         // throw an error if the requested method is not a function
         throw new Error('DID Url Method is not allowed.');
@@ -144,10 +146,10 @@ export class Did extends BlockotusContract {
     private queryStringToObject = (queryString: string): Record<string, any> => {
         const params = new URLSearchParams(queryString);
         const result = {};
-        for(const [key, value] of params) { // each 'entry' is a [key, value] tupple
+        for (const [key, value] of params) { // each 'entry' is a [key, value] tupple
             result[key] = value;
         }
         return result;
-    };
+    }
 
 }
